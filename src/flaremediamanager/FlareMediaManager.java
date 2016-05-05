@@ -46,12 +46,7 @@ public class FlareMediaManager {
             throw new IllegalStateException("No read permissions to file not found");
         }
 
-        try {
-            //Iso iso = new Iso(videoFile);//Iso(new FileInputStream(videoFilePath).getChannel());
-            IsoFile isoFile = new IsoFile(videoFile);
-        } catch (IOException ex) {
-            Logger.getLogger(FlareMediaManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
 
         //Need id generating system, but okay for now
         String uniqueID = UUID.randomUUID().toString();
@@ -60,6 +55,7 @@ public class FlareMediaManager {
 
         if (successful) {
             // creating the directory succeeded
+            
             System.out.println("directory was created successfully");
             VideoParser videoParser = new VideoParser(videoFile);
             int totalFrames = videoParser.getVideoFramesTotal();
@@ -71,6 +67,11 @@ public class FlareMediaManager {
             writer.println(videoParser.getVideoFPS());
             writer.println(videoParser.getVideoDuration());
             writer.close();
+            
+            IsoFile isoFile = new IsoFile(videoFile);
+            IsoFile rippedAudio = IsoFile.ripAudio(isoFile);
+            
+            
 
             Frame currentFrame = null;
             BufferedImage img = null;
@@ -83,6 +84,7 @@ public class FlareMediaManager {
                 ImageIO.write(img, "png" , outputFile );
 
             }
+
             
             
         }
